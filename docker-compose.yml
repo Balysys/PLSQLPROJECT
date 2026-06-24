@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace:cached
+    command: sleep infinity
+    networks:
+      - oracle-network
+    depends_on:
+      - oracle-db
+
+  oracle-db:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle-database
+    environment:
+      - ORACLE_PASSWORD=OraclePwd_2025
+      - APP_USER=hotel_admin
+      - APP_USER_PASSWORD=Hotel123
+    ports:
+      - "1521:1521"
+      - "8181:8181"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./oracle-scripts:/opt/oracle/scripts/startup
+    networks:
+      - oracle-network
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/OraclePwd_2025@//localhost:1521/FREEPDB1 as sysdba", "select 1 from dual;"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+volumes:
+  oracle-data:
+
+networks:
+  oracle-network:

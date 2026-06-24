@@ -1,0 +1,21 @@
+{
+  "name": "Oracle Hotel Project",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "root",
+  "forwardPorts": [1521, 8181],
+  "postCreateCommand": "/workspace/setup_oracle.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oracle.sql-developer",
+        "vscjava.vscode-java-pack",
+        "ms-vscode-remote.remote-containers"
+      ]
+    }
+  },
+  "containerEnv": {
+    "TZ": "UTC"
+  }
+}
